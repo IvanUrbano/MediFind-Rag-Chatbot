@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
-import { HeartPulse, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import Sidebar from './components/layout/Sidebar'
+import BrandMark from './components/common/BrandMark'
 import ChatHeader from './components/chat/ChatHeader'
 import WelcomeScreen from './components/chat/WelcomeScreen'
 import MessageList from './components/chat/MessageList'
 import MessageInput from './components/chat/MessageInput'
 import MedicineCatalog from './components/catalog/MedicineCatalog'
+import HomePage from './components/home/HomePage'
 import Disclaimer from './components/common/Disclaimer'
 import { useConversations } from './hooks/useConversations'
 import { useChat } from './hooks/useChat'
@@ -16,7 +18,7 @@ export default function App() {
     conversations,
     activeId,
     activeConversation,
-    newConversation,
+    startNewChat,
     selectConversation,
     renameConversation,
     deleteConversation,
@@ -36,7 +38,9 @@ export default function App() {
   const [collapsed, setCollapsed] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [aboutOpen, setAboutOpen] = useState(false)
-  const [activeView, setActiveView] = useState('chat')
+  const [activeView, setActiveView] = useState('home')
+  const [draft, setDraft] = useState('')
+  const [homeScrollTarget, setHomeScrollTarget] = useState(null)
 
   const messages = activeConversation?.messages ?? []
   const hasMessages = messages.length > 0
@@ -70,15 +74,46 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [aboutOpen])
 
-  const handleNewChat = useCallback(() => {
-    newConversation()
+  useEffect(() => {
+    if (activeView !== 'home' || !homeScrollTarget) return undefined
+    const frame = requestAnimationFrame(() => {
+      document
+        .getElementById(homeScrollTarget)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      setHomeScrollTarget(null)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [activeView, homeScrollTarget])
+
+  const focusChatInput = useCallback(() => {
+    requestAnimationFrame(() => {
+      document.querySelector('[data-chat-input]')?.focus()
+    })
+  }, [])
+
+  const handleHome = useCallback(() => {
+    setActiveView('home')
+    setMobileOpen(false)
+  }, [])
+
+  const handleAsk = useCallback(() => {
     setActiveView('chat')
     setMobileOpen(false)
-  }, [newConversation])
+    focusChatInput()
+  }, [focusChatInput])
+
+  const handleNewChat = useCallback(() => {
+    startNewChat()
+    setDraft('')
+    setActiveView('chat')
+    setMobileOpen(false)
+    focusChatInput()
+  }, [startNewChat, focusChatInput])
 
   const handleSelect = useCallback(
     (id) => {
       selectConversation(id)
+      setDraft('')
       setActiveView('chat')
       setMobileOpen(false)
     },
@@ -92,12 +127,28 @@ export default function App() {
     [deleteConversation],
   )
 
-  const handleExample = useCallback(
+  const handleSuggestion = useCallback(
     (question) => {
-      send(question)
+      setDraft(question)
+      setActiveView('chat')
+      focusChatInput()
+    },
+    [focusChatInput],
+  )
+
+  const handleSend = useCallback(
+    (text) => {
+      setDraft('')
+      send(text)
     },
     [send],
   )
+
+  const handleViewScope = useCallback(() => {
+    setActiveView('home')
+    setHomeScrollTarget('scope-limitations')
+    setMobileOpen(false)
+  }, [])
 
   const handleFeedback = useCallback(
     (messageId, value) => {
@@ -106,14 +157,6 @@ export default function App() {
     },
     [activeId, patchMessage],
   )
-
-  const focusComposer = useCallback(() => {
-    setActiveView('chat')
-    setMobileOpen(false)
-    requestAnimationFrame(() => {
-      document.querySelector('[data-chat-input]')?.focus()
-    })
-  }, [])
 
   const handleBrowse = useCallback(() => {
     setMobileOpen(false)
@@ -148,20 +191,17 @@ export default function App() {
     onSelect: handleSelect,
     onRename: renameConversation,
     onDelete: handleDelete,
-    onHome: handleNewChat,
-    onFocusChat: focusComposer,
+    onHome: handleHome,
+    onFocusChat: handleAsk,
     onBrowse: handleBrowse,
     activeView,
   }
 
   return (
-    <div className="app-shell flex h-dvh overflow-hidden text-slate-800">
-      <div className="ambient-orb ambient-orb-one" aria-hidden="true" />
-      <div className="ambient-orb ambient-orb-two" aria-hidden="true" />
-      <div className="ambient-orb ambient-orb-three" aria-hidden="true" />
+    <div className="app-shell flex h-dvh overflow-hidden text-ink">
       {/* Mobile backdrop */}
       <div
-        className={`fixed inset-0 z-30 bg-slate-900/25 backdrop-blur-sm transition-opacity duration-200 md:hidden ${
+        className={`fixed inset-0 z-30 bg-[#1d2821]/45 transition-opacity duration-200 md:hidden ${
           mobileOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
         onClick={() => setMobileOpen(false)}
@@ -180,7 +220,20 @@ export default function App() {
       {/* Chat column */}
       <main className="relative z-10 flex min-w-0 flex-1 flex-col">
         <ChatHeader
-          title={activeView === 'catalog' ? 'Browse Medicines' : activeConversation?.title ?? 'MediFind PH'}
+          title={
+            activeView === 'home'
+              ? 'Home'
+              : activeView === 'catalog'
+                ? 'Browse Medicines'
+                : activeConversation?.title ?? 'New conversation'
+          }
+          subtitle={
+            activeView === 'home'
+              ? 'Learn about MediFind PH · OTC medicine reference'
+              : activeView === 'catalog'
+                ? 'Documented OTC records · 3 source volumes'
+                : 'Grounded in Vol. I–III · PDF cited'
+          }
           isMobileOpen={mobileOpen}
           isSidebarCollapsed={collapsed}
           onToggleMobile={() => setMobileOpen((v) => !v)}
@@ -188,33 +241,75 @@ export default function App() {
           onClear={handleClear}
           hasMessages={activeView === 'chat' && hasMessages}
           showClear={activeView === 'chat'}
-          showModeBadge={activeView === 'chat'}
+          showModeBadge={activeView !== 'home'}
           onAbout={() => setAboutOpen(true)}
         />
 
-        {activeView === 'catalog' ? (
+        {activeView === 'home' ? (
+          <HomePage onAsk={handleAsk} />
+        ) : activeView === 'catalog' ? (
           <MedicineCatalog onAskAI={handleAskMedicine} />
         ) : (
           <>
             {hasMessages ? (
               <MessageList messages={messages} isSending={isSending} retryMessageId={retryState?.messageId ?? null} onRetry={retry} onFeedback={handleFeedback} />
             ) : (
-              <WelcomeScreen onExample={handleExample} />
+              <WelcomeScreen onSelectSuggestion={handleSuggestion} onViewScope={handleViewScope} />
             )}
-            <MessageInput onSend={send} disabled={isSending} showSuggestions={!hasMessages} />
-            <p className="shrink-0 px-4 pb-3 text-center text-[11px] leading-relaxed text-slate-500/80">MediFind PH provides general OTC medicine information and does not replace professional medical advice.</p>
+            <MessageInput value={draft} onChange={setDraft} onSend={handleSend} disabled={isSending} />
+            <p className="shrink-0 px-4 pb-3 text-center text-[11px] leading-relaxed text-muted">MediFind PH provides general OTC medicine information and does not replace professional medical advice.</p>
           </>
         )}
       </main>
 
       {aboutOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 p-4 backdrop-blur-sm" role="presentation" onMouseDown={() => setAboutOpen(false)}>
-          <section role="dialog" aria-modal="true" aria-labelledby="about-title" className="glass-panel relative w-full max-w-lg rounded-[28px] p-6 shadow-2xl sm:p-8" onMouseDown={(event) => event.stopPropagation()}>
-            <button type="button" onClick={() => setAboutOpen(false)} aria-label="Close About" className="absolute right-4 top-4 rounded-full p-2 text-slate-500 transition hover:bg-white/60 hover:text-slate-800"><X className="h-5 w-5" /></button>
-            <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-600 text-white shadow-lg shadow-teal-600/20"><HeartPulse className="h-5 w-5" /></span>
-            <h2 id="about-title" className="text-xl font-bold text-slate-900">About MediFind PH</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">MediFind PH is a retrieval-augmented assistant for Philippine OTC medicine information. It answers only from the three supplied MediFind leaflet volumes and cites the source PDF and page whenever evidence is available.</p>
-            <div className="mt-5"><Disclaimer /></div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1b2620]/55 p-4" role="presentation" onMouseDown={() => setAboutOpen(false)}>
+          <section role="dialog" aria-modal="true" aria-labelledby="about-title" className="panel relative max-h-[calc(100dvh-2rem)] w-full max-w-xl overflow-y-auto rounded-[12px]" onMouseDown={(event) => event.stopPropagation()}>
+            <div className="h-[2px] bg-brass-400/80" aria-hidden="true" />
+            <button type="button" onClick={() => setAboutOpen(false)} aria-label="Close About" className="btn btn-ghost btn-icon absolute right-4 top-5 h-8 w-8"><X className="h-4 w-4" /></button>
+            <div className="px-6 pb-6 pt-6 sm:px-8 sm:pb-8">
+              <div className="flex items-center gap-3">
+                <BrandMark className="h-11 w-11 shrink-0" />
+                <div>
+                  <p className="font-mono text-[8.5px] uppercase tracking-[0.16em] text-muted">About the reference</p>
+                  <h2 id="about-title" className="mt-1 font-serif text-[24px] font-medium leading-none text-ink">MediFind PH</h2>
+                </div>
+              </div>
+              <p className="mt-5 text-[12.5px] leading-7 text-muted">MediFind PH is a reference assistant for Philippine OTC medicine information. It answers only from the three supplied MediFind leaflet volumes and cites the source PDF and page whenever evidence is available.</p>
+
+              <div className="mt-5 grid grid-cols-3 divide-x divide-line border border-line text-center">
+                <div className="px-2 py-3">
+                  <span className="block font-serif text-[18px] leading-none text-ink">3</span>
+                  <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.1em] text-muted">Volumes</span>
+                </div>
+                <div className="px-2 py-3">
+                  <span className="block font-serif text-[18px] leading-none text-ink">PDF</span>
+                  <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.1em] text-muted">Citations</span>
+                </div>
+                <div className="px-2 py-3">
+                  <span className="block font-serif text-[18px] leading-none text-ink">OTC</span>
+                  <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.1em] text-muted">Scope</span>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <p className="font-mono text-[8.5px] uppercase tracking-[0.14em] text-muted">Source volumes</p>
+                <ul className="mt-2 divide-y divide-line border-y border-line">
+                  {[
+                    ['I', 'Pain · Fever · Muscle'],
+                    ['II', 'Cold · Cough · Allergy · Throat'],
+                    ['III', 'Digestive · Antiseptic · Eye'],
+                  ].map(([numeral, name]) => (
+                    <li key={numeral} className="flex items-center gap-3 py-2">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center border border-line font-serif text-[10px] text-brass-600">{numeral}</span>
+                      <span className="text-[12px] text-ink">{name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-5"><Disclaimer /></div>
+            </div>
           </section>
         </div>
       )}

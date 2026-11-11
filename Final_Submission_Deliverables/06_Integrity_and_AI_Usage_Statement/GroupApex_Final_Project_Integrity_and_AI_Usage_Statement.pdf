@@ -1,0 +1,186 @@
+%PDF-1.4
+%MediFindPH
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 4 /Kids [6 0 R 8 0 R 10 0 R 12 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Length 3871 >>
+stream
+BT /F2 15 Tf 1 0 0 1 137.0 740.0 Tm (FINAL PROJECT INTEGRITY AND AI USAGE STATEMENT) Tj ET
+BT /F2 11 Tf 1 0 0 1 241.3 718.8 Tm (MEDIFIND PH - GROUP APEX) Tj ET
+0.55 w 54 696.7 m 558 696.7 l S
+BT /F2 10 Tf 1 0 0 1 54.0 684.7 Tm (Project Title: MediFind PH: A RAG-Based OTC Medicine Information Assistant Using Pharmaceutical) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 671.9 Tm (Entity Normalization) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 657.1 Tm (Course/Section: ITC-C508 - Deep Learning \(Natural Language Processing\)) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 642.3 Tm (Authors: Mendez, Juliana Nichole; Subala, Antonio Jayven; Urbano, Ivan) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 627.5 Tm (Group: Group Apex) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 606.7 Tm (Submission Date: ____________________________________) Tj ET
+BT /F2 11 Tf 1 0 0 1 54.0 583.9 Tm (PURPOSE OF THIS STATEMENT) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 565.8 Tm (This document records the authors' declaration regarding the authenticity of the submitted work,) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 553.0 Tm (the accuracy of the reported experiment results, the contribution of each group member, and the) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 540.2 Tm (transparent use of generative artificial intelligence tools. It must be reviewed and signed) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 527.4 Tm (personally by every listed author before submission.) Tj ET
+BT /F2 11 Tf 1 0 0 1 54.0 505.6 Tm (1. ACADEMIC INTEGRITY AND AUTHENTICITY DECLARATION) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 486.6 Tm ([ ] We declare that MediFind PH is the work of the students named in this statement, except for) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 473.8 Tm (sources, software libraries, public models, and AI assistance that are explicitly acknowledged.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 456.0 Tm ([ ] We did not knowingly submit another person's project as our own, falsify authorship,) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 443.2 Tm (fabricate source documents, or represent unexecuted experiments as completed experiments.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 425.4 Tm ([ ] The three MediFind OTC PDF volumes are the project's controlled factual references. Medicine) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 412.6 Tm (facts, expected evaluation answers, and citations must be traceable to those documents.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 394.8 Tm ([ ] All external materials, frameworks, pretrained models, libraries, and references used in the) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 382.0 Tm (project are acknowledged in the report, source package, or reproducibility documentation.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 364.2 Tm ([ ] Each author accepts responsibility for reviewing the final submission and for correcting any) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 351.4 Tm (error discovered before submission.) Tj ET
+BT /F2 11 Tf 1 0 0 1 54.0 329.6 Tm (2. ACCURACY OF REPORTED RESULTS) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 310.5 Tm ([ ] The chunking tables and notebook outputs preserve the recorded experiment results for) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 297.7 Tm (Configurations A through E.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 279.9 Tm ([ ] Configuration D remains 800-character chunks, 200-character overlap, and top-k 3; the) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 267.1 Tm (production checkpoint contains 762 chunks.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 249.3 Tm ([ ] The chatbot response evaluation preserves an actual 36-question baseline API run. Baseline) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 236.5 Tm (results are not relabeled as post-fix results.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 218.7 Tm ([ ] Limitations, failed cases, partial passes, OCR constraints, and the fact that final Phase 5) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 205.9 Tm (manual testing remains the researchers' responsibility are disclosed rather than hidden.) Tj ET
+BT /F1 8 Tf 1 0 0 1 54 24 Tm (MediFind PH - Group Apex) Tj ET
+BT /F1 8 Tf 1 0 0 1 500 24 Tm (Page 1 of 4) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3168 >>
+stream
+BT /F2 15 Tf 1 0 0 1 137.0 740.0 Tm (FINAL PROJECT INTEGRITY AND AI USAGE STATEMENT) Tj ET
+BT /F2 11 Tf 1 0 0 1 241.3 718.8 Tm (MEDIFIND PH - GROUP APEX) Tj ET
+0.55 w 54 696.7 m 558 696.7 l S
+BT /F2 11 Tf 1 0 0 1 54.0 684.7 Tm (3. GENERATIVE AI USAGE DISCLOSURE) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 665.6 Tm (Generative AI assistance was used in this project and is disclosed here. The authors must not sign) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 652.8 Tm (a statement claiming that no generative AI was used. The use of AI does not transfer academic) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 640.0 Tm (responsibility away from the students.) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 619.2 Tm (Tool/Service: OpenAI ChatGPT/Codex \(AI-assisted coding, analysis, documentation, and) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 606.4 Tm (artifact-generation environment\).) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 587.6 Tm (Disclosed purposes:) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 571.8 Tm (- Reviewing and explaining RAG implementation behavior, retrieval errors, formulation matching,) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 559.0 Tm (leaflet-section extraction, citation scoping, and medical-safety controls.) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 541.2 Tm (- Assisting with code changes, regression-test scaffolding, evaluation scripts, and) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 528.4 Tm (reproducibility instructions under student direction.) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 510.6 Tm (- Organizing deliverable folders and drafting or formatting reports, notebooks, spreadsheets,) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 497.8 Tm (CSV files, manifests, checksums, and this signature-ready statement.) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 480.0 Tm (- Helping analyze actual saved experiment outputs and actual live-API evaluation results; AI) Tj ET
+BT /F1 10 Tf 1 0 0 1 66.0 467.2 Tm (assistance was not treated as a factual medicine source.) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 446.4 Tm (Controls and student responsibilities:) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 430.6 Tm ([ ] The three official project PDFs remain the only factual reference for medicine answers and) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 417.8 Tm (expected evaluation answers.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 400.0 Tm ([ ] Original experiment outputs and baseline metrics are preserved. No result should be called) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 387.2 Tm (executed unless corresponding execution evidence exists.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 369.4 Tm ([ ] The students are responsible for reading, testing, correcting, and approving all AI-assisted) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 356.6 Tm (code and text before submission.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 338.8 Tm ([ ] AI did not sign this document, determine individual grades, or certify the truth of any) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 326.0 Tm (student's declaration.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 308.2 Tm ([ ] If the institution or instructor requires a different disclosure format or restricts) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 295.4 Tm (generative AI use, the authors must obtain guidance before signing.) Tj ET
+BT /F1 8 Tf 1 0 0 1 54 24 Tm (MediFind PH - Group Apex) Tj ET
+BT /F1 8 Tf 1 0 0 1 500 24 Tm (Page 2 of 4) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
+<< /Length 2713 >>
+stream
+BT /F2 15 Tf 1 0 0 1 137.0 740.0 Tm (FINAL PROJECT INTEGRITY AND AI USAGE STATEMENT) Tj ET
+BT /F2 11 Tf 1 0 0 1 241.3 718.8 Tm (MEDIFIND PH - GROUP APEX) Tj ET
+0.55 w 54 696.7 m 558 696.7 l S
+BT /F2 11 Tf 1 0 0 1 54.0 684.7 Tm (4. INDIVIDUAL CONTRIBUTION RECORD) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 666.6 Tm (Each student must personally describe specific contributions. Do not leave this section blank and) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 653.8 Tm (do not copy identical descriptions unless the work was genuinely shared.) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 631.0 Tm (Student: Mendez, Juliana Nichole) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 613.2 Tm (Specific contributions: __________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 597.4 Tm (________________________________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 581.6 Tm (________________________________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 565.8 Tm (________________________________________________________________________________________________) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 537.0 Tm (Student: Subala, Antonio Jayven) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 519.2 Tm (Specific contributions: __________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 503.4 Tm (________________________________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 487.6 Tm (________________________________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 471.8 Tm (________________________________________________________________________________________________) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 443.0 Tm (Student: Urbano, Ivan) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 425.2 Tm (Specific contributions: __________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 409.4 Tm (________________________________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 393.6 Tm (________________________________________________________________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 377.8 Tm (________________________________________________________________________________________________) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 343.0 Tm (Contribution review initials:) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 322.2 Tm (Mendez: __________ Subala: __________ Urbano: __________) Tj ET
+BT /F1 8 Tf 1 0 0 1 54 24 Tm (MediFind PH - Group Apex) Tj ET
+BT /F1 8 Tf 1 0 0 1 500 24 Tm (Page 3 of 4) Tj ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
+endobj
+11 0 obj
+<< /Length 2780 >>
+stream
+BT /F2 15 Tf 1 0 0 1 137.0 740.0 Tm (FINAL PROJECT INTEGRITY AND AI USAGE STATEMENT) Tj ET
+BT /F2 11 Tf 1 0 0 1 241.3 718.8 Tm (MEDIFIND PH - GROUP APEX) Tj ET
+0.55 w 54 696.7 m 558 696.7 l S
+BT /F2 11 Tf 1 0 0 1 54.0 684.7 Tm (5. FINAL DECLARATION) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 665.6 Tm (By signing below, each student confirms that they have read the complete final submission, that) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 652.8 Tm (their contribution description is accurate, that the reported results are presented honestly to) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 640.0 Tm (the best of their knowledge, and that the generative AI disclosure above is complete. Each signer) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 627.2 Tm (understands that false statements, fabricated evidence, undisclosed AI use, or misrepresented) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 614.4 Tm (contributions may be handled under the institution's academic integrity rules.) Tj ET
+BT /F2 11 Tf 1 0 0 1 54.0 589.6 Tm (STUDENT SIGNATURES) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 567.6 Tm (Printed Name: Mendez, Juliana Nichole) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 549.8 Tm (Signature: __________________________________________ Date: __________________________) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 523.0 Tm (Printed Name: Subala, Antonio Jayven) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 505.2 Tm (Signature: __________________________________________ Date: __________________________) Tj ET
+BT /F2 10 Tf 1 0 0 1 54.0 478.4 Tm (Printed Name: Urbano, Ivan) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 460.6 Tm (Signature: __________________________________________ Date: __________________________) Tj ET
+BT /F2 11 Tf 1 0 0 1 54.0 425.8 Tm (OPTIONAL ADVISER/INSTRUCTOR ACKNOWLEDGMENT) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 406.7 Tm (Name: ______________________________________________) Tj ET
+BT /F1 10 Tf 1 0 0 1 54.0 388.9 Tm (Signature: __________________________________________ Date: __________________________) Tj ET
+BT /F2 11 Tf 1 0 0 1 54.0 361.1 Tm (PRE-SUBMISSION CHECKLIST) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 342.0 Tm ([ ] All three contribution descriptions are completed.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 324.2 Tm ([ ] All three students reviewed the AI usage disclosure.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 306.4 Tm ([ ] All three students signed and dated the statement personally.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 288.6 Tm ([ ] The signed PDF is included in the final submission folder.) Tj ET
+BT /F1 10 Tf 1 0 0 1 64.0 270.8 Tm ([ ] No unsigned or draft version is submitted as the signed final statement.) Tj ET
+BT /F2 9 Tf 1 0 0 1 96.5 239.0 Tm (Document status: SIGNATURE-READY TEMPLATE - NOT VALID UNTIL COMPLETED AND SIGNED BY ALL AUTHORS) Tj ET
+BT /F1 8 Tf 1 0 0 1 54 24 Tm (MediFind PH - Group Apex) Tj ET
+BT /F1 8 Tf 1 0 0 1 500 24 Tm (Page 4 of 4) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 11 0 R >>
+endobj
+xref
+0 13
+0000000000 65535 f 
+0000000021 00000 n 
+0000000070 00000 n 
+0000000147 00000 n 
+0000000217 00000 n 
+0000000292 00000 n 
+0000004214 00000 n 
+0000004350 00000 n 
+0000007569 00000 n 
+0000007705 00000 n 
+0000010469 00000 n 
+0000010606 00000 n 
+0000013438 00000 n 
+trailer
+<< /Size 13 /Root 1 0 R >>
+startxref
+13576
+%%EOF

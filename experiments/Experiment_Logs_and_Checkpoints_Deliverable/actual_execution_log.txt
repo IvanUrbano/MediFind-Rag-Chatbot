@@ -1,0 +1,73 @@
+MEDIFIND PH — ACTUAL EXECUTION LOG EXCERPTS
+Source: experiments/GroupApex_RAG_Experiment_Notebook.ipynb
+
+[CELL 5 — ENVIRONMENT]
+Torch sees device : cuda
+GPU name          : Tesla T4
+VRAM              : 14.6 GB
+Embeddings device : cuda
+Model device_map  : auto (moves layers to GPU when available)
+
+[CELL 9 — DOCUMENT PROCESSING]
+Loaded MediFind_OTC_Vol1_Pain-Fever-Muscle.pdf: 77 document section(s)
+Loaded MediFind_OTC_Vol2_Cold-Cough-Allergy-Throat.pdf: 84 document section(s)
+Loaded MediFind_OTC_Vol3_Digestive-Antiseptic-Eye.pdf: 65 document section(s)
+Loaded source documents: 226
+Generated chunks: 703
+
+[CELL 11 — EMBEDDINGS AND VECTOR DATABASE]
+Embedding model: sentence-transformers/all-MiniLM-L6-v2
+Created a new vector database.
+Indexed chunk count: 703
+
+[CELL 13 — LLM LOAD]
+CUDA available: True
+GPU: Tesla T4
+Loaded model: google/flan-t5-base | seq2seq: True
+
+[CELL 15 — RAG INTEGRATION]
+RAG function ready (question-first token budget, split timings, seq2seq-aware).
+Input token limit: 512 | Max new tokens: 64
+
+[CELL 18 — RETRIEVAL]
+Question: What is the generic name of Biogesic?
+Retrieved passage 1: MediFind_OTC_Vol1_Pain-Fever-Muscle.pdf, page 18, start_index 0
+Evidence: Biogesic 500 mg Tablet; Generic name: Paracetamol; Registration number: DR-153; Manufacturer: UNILAB, Inc.
+Four retrieved passages were printed.
+
+[CELL 19 — RAG ANSWER]
+Question: What is Dolfenal used for?
+Answer: Over-the-Counter (OTC) Drug Pharmacologic category Anti-Inflammatory and Anti-Rheumatic Products, Non-Steroids (Fenamates) Registration number DRP-8716 Manufacturer Amherst Laboratories, Inc.
+Sources: Volume 1 pages 22 and 23 (four chunks)
+Elapsed seconds: 3.64
+
+[CELL 20 — TIMED PIPELINE]
+Question: What is the main topic discussed in the documents?
+Retrieval completed in 0.03s. Retrieved 4 chunks.
+Answer generation completed in 0.35s
+Answer: OTC medicine
+Total time: 0.34 seconds
+
+[CELL 22 — SELECTED EXPERIMENT RUN D]
+RUN D: chunk 800 | overlap 200 | top-k 3
+indexing 5.78s | avg retrieval 0.029s | avg generation 0.832s | avg total 0.860s
+answer quality 3/9 | Precision@3 0.2593 | Recall@3 0.5370 | MRR@3 0.5926
+
+[CELL 24/26 — BENCHMARK]
+GPU total response speedup across A-C: 6.00x to 7.08x
+GPU generation speedup: 6.07x to 7.21x
+GPU indexing speedup: 22.07x to 30.56x
+GPU retrieval speedup: 2.09x to 2.50x
+
+[CELL 31 — INTERACTIVE CHATBOT]
+Nine questions completed with citations.
+Response times: 0.21, 0.37, 0.17, 0.18, 0.28, 0.14, 0.83, 1.75, 1.45 seconds.
+Observed answers included correct results (Amherst Laboratories, Inc.; DR-153; Calpol), partial results, and incorrect results (for example, Paraacetamol).
+
+[PRODUCTION CHECKPOINT — data/chroma_db/manifest.json]
+chunk_size: 800
+chunk_overlap: 200
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+collection_name: medifind_otc
+chunk_count: 762
+created_at: 2026-11-10T12:41:59

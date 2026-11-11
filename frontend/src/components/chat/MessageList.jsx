@@ -17,12 +17,12 @@ export default function MessageList({
 
   return (
     <div
-      className="scrollbar-slim flex-1 overflow-y-auto px-3 py-5 sm:px-6"
+      className="scrollbar-slim flex-1 overflow-y-auto px-4 py-6 sm:px-8"
       role="log"
       aria-live="polite"
       aria-label="Chat messages"
     >
-      <div className="mx-auto flex max-w-3xl flex-col gap-5">
+      <div className="mx-auto flex max-w-3xl flex-col gap-6">
         {messages.map((message) => (
           <MessageBubble
             key={message.id}

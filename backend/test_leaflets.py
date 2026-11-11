@@ -193,9 +193,28 @@ def main() -> int:
         "Vol1 side effects grounded and not the indications list",
         response["status"] == "ok"
         and card_regs(response) == [DOLFENAL]
+        and sum(
+            term in response["answer"].lower()
+            for term in ("itching", "nausea", "rashes", "tinnitus", "vomiting")
+        ) >= 2
         and "dental pain" not in response["answer"].lower()
         and "dysmenorrhea" not in response["answer"].lower(),
         response["answer"][:400],
+    )
+
+    print("--- Vol3 warning section boundaries ---")
+    response = answer_question(
+        "What warnings and precautions are documented for Canesten 1% cream?"
+    )
+    warning_answer = response["answer"].lower()
+    check(
+        "Canesten warnings come from precautions, not manufacturer text",
+        response["status"] == "ok"
+        and "contact with the eyes" in warning_answer
+        and "do not swallow" in warning_answer
+        and "latex" in warning_answer
+        and "encube ethicals private limited" not in warning_answer,
+        response["answer"][:700],
     )
 
     print("--- unavailable information: structured vs leaflet ---")

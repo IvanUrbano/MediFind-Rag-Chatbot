@@ -1,0 +1,19 @@
+{
+  "fingerprint": {
+    "config": {
+      "chunk_size": 800,
+      "chunk_overlap": 200,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "collection_name": "medifind_otc",
+      "loader": "PyPDFLoader",
+      "splitter": "RecursiveCharacterTextSplitter"
+    },
+    "sources": {
+      "MediFind_OTC_Vol1_Pain-Fever-Muscle.pdf": "c1af5d9c984ca62a7e79031333739b5b5bec614739c704ded6538dd99313c95b",
+      "MediFind_OTC_Vol2_Cold-Cough-Allergy-Throat.pdf": "76b2c984a75ab0ef3bf8632c5c27d4d0a97d4c3621c55b0b8f0d64ab06d98d5a",
+      "MediFind_OTC_Vol3_Digestive-Antiseptic-Eye.pdf": "8c2cbceca17ca1e39a0d6865bdfe239e9d905147738ab1866e7912d5f72543b1"
+    }
+  },
+  "chunk_count": 762,
+  "created_at": "2026-11-10T12:41:59"
+}

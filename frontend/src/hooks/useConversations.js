@@ -57,22 +57,10 @@ export function useConversations() {
     [conversations, activeId],
   )
 
-  const newConversation = useCallback(() => {
-    const conversation = {
-      id: uid(),
-      title: DEFAULT_TITLE,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      messages: [],
-    }
-    setState((prev) => ({
-      conversations: [conversation, ...prev.conversations].slice(
-        0,
-        MAX_CONVERSATIONS,
-      ),
-      activeId: conversation.id,
-    }))
-    return conversation.id
+  const startNewChat = useCallback(() => {
+    setState((prev) =>
+      prev.activeId === null ? prev : { ...prev, activeId: null },
+    )
   }, [])
 
   const selectConversation = useCallback((id) => {
@@ -179,7 +167,7 @@ export function useConversations() {
     conversations,
     activeId,
     activeConversation,
-    newConversation,
+    startNewChat,
     selectConversation,
     renameConversation,
     deleteConversation,

@@ -407,8 +407,7 @@ _SECTION_HEADINGS = (
     (
         "warnings",
         r"(?:care that should be taken when taking this medicine|"
-        r"warnings? and precautions?|warnings?|precautions?|"
-        r"when should you consult your doctor)",
+        r"warnings? and precautions?|warnings?|precautions?)",
     ),
     (
         "side_effects",
@@ -442,6 +441,7 @@ _EXTRA_HEADINGS = (
     r"other information",
     r"before you use",
     r"manufactured by[^\n]*",
+    r"when should you consult your doctor",
 )
 _HEADING_RE = re.compile(
     r"(?m)^[ \t]*(?:"
@@ -674,6 +674,20 @@ def _search_text(record: dict) -> str:
     )
 
 
+def _quantity_text(record: dict) -> str:
+    """Raw strength-bearing fields used for quantity comparison.
+
+    ``normalize_text`` deliberately removes punctuation for entity matching,
+    but that turns a decimal such as ``12.5 mg`` into ``12 5 mg``.  Quantity
+    parsing must therefore use the original fields so a decimal formulation
+    is never mistaken for its trailing digit.
+    """
+    return " ".join(
+        str(record.get(k) or "")
+        for k in ("brand", "brandName", "strength", "dosageForm")
+    )
+
+
 def select_mentioned_quantities(text: str, matches: list[dict]) -> list[dict]:
     """Keep records documenting ANY strength quantity named in the query.
 
@@ -688,7 +702,7 @@ def select_mentioned_quantities(text: str, matches: list[dict]) -> list[dict]:
     selected = [
         m
         for m in matches
-        if quantity_pairs(_search_text(m["record"])) & quantities
+        if quantity_pairs(_quantity_text(m["record"])) & quantities
     ]
     return selected or list(matches)
 
@@ -757,10 +771,10 @@ def narrow_variants(text: str, matches: list[dict]) -> tuple[list[dict], bool]:
             current = candidate
 
     # (c) Explicit quantities in the query must appear on the record.
-    quantities = quantity_pairs(query)
+    quantities = quantity_pairs(text)
     if quantities and len(current) > 1:
         def _has_all(match: dict) -> bool:
-            return quantities <= quantity_pairs(_search_text(match["record"]))
+            return quantities <= quantity_pairs(_quantity_text(match["record"]))
 
         candidate = [m for m in current if _has_all(m)]
         if candidate:

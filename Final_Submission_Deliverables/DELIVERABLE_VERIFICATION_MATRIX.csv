@@ -1,0 +1,7 @@
+"No.","Deliverable","Required types","Included evidence","Status"
+"1","Final Draft of IEEE Report",".docx","IEEE-format final report listing Mendez, Juliana Nichole; Subala, Antonio Jayven; and Urbano, Ivan","COMPLETE"
+"2","Chunking Experiments",".ipynb, .xlsx","5 configurations; saved outputs; 45 question rows; selection justification","COMPLETE"
+"3","Source Code and Reproducibility",".ipynb and supporting files","Configuration D notebook; backend; frontend; PDFs; manifests; tests","COMPLETE"
+"4","Experiment Logs and Checkpoints",".xlsx and supporting files","9-sheet log workbook; raw log; manifests; original executed notebook/results","COMPLETE"
+"5","Chatbot Response Evaluation",".csv, .xlsx","36 baseline live-API tests; answerable and unanswerable; expected/actual/review","COMPLETE"
+"6","Signed Final Project Integrity and AI Usage Statement",".pdf","Four-page signature-ready declaration with truthful AI disclosure, contribution fields, and signature lines for all three authors","READY FOR STUDENT SIGNATURES"

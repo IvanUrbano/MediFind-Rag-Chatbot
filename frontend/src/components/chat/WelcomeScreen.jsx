@@ -1,47 +1,70 @@
-import { Beaker, FileText, FlaskConical, Pill, Search, Stethoscope } from 'lucide-react'
+import { ArrowRight, MessageSquareText } from 'lucide-react'
+import BrandMark from '../common/BrandMark'
 
-const SHORTCUTS = [
-  { label: 'Find Medicine', icon: Search, color: 'text-teal-600 bg-teal-100/70', question: 'Which products contain naproxen sodium?' },
-  { label: 'Generic Names', icon: Pill, color: 'text-sky-600 bg-sky-100/70', question: 'What is the generic name of Dolfenal?' },
-  { label: 'Ingredients', icon: Beaker, color: 'text-violet-600 bg-violet-100/70', question: 'What are the active ingredients of Alaxan?' },
-  { label: 'Formulations', icon: FlaskConical, color: 'text-fuchsia-600 bg-fuchsia-100/70', question: 'What formulations of Biogesic are documented?' },
-  { label: 'Indications', icon: Stethoscope, color: 'text-rose-600 bg-rose-100/70', question: 'What is Dolfenal used for?' },
-  { label: 'PDF Sources', icon: FileText, color: 'text-amber-600 bg-amber-100/70', question: 'Which source PDF documents Biogesic 500 mg Tablet?' },
+const SUGGESTED_QUESTIONS = [
+  'What is the generic name of Biogesic 500 mg Tablet?',
+  'What formulations of Biogesic are documented?',
+  'What are the ingredients of Gaviscon Double Action Suspension?',
+  'What precautions are documented for Allerkid?',
 ]
 
-function CapsuleOrb() {
+export default function WelcomeScreen({ onSelectSuggestion, onViewScope }) {
   return (
-    <div className="capsule-stage" aria-hidden="true">
-      <div className="capsule-orbit"><span /></div>
-      <div className="capsule-glow" />
-      <div className="capsule-float">
-        <div className="capsule-shape">
-          <div className="capsule-half capsule-teal" />
-          <div className="capsule-half capsule-white" />
-          <span className="capsule-seam" />
-          <span className="capsule-shine" />
-        </div>
-      </div>
-    </div>
-  )
-}
+    <div className="canvas-grid scrollbar-slim min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex min-h-full max-w-3xl flex-col justify-center px-5 py-10 sm:px-8 lg:py-14">
+        <div className="animate-fade-in">
+          <div className="flex items-center gap-2.5">
+            <BrandMark className="h-8 w-8 shrink-0" />
+            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted">
+              MediFind PH <span className="text-brass-500">/</span> New conversation
+            </p>
+          </div>
 
-export default function WelcomeScreen({ onExample }) {
-  return (
-    <div className="scrollbar-slim min-h-0 flex-1 overflow-y-auto">
-      <div className="mx-auto flex min-h-full max-w-5xl flex-col items-center justify-center px-4 pb-3 pt-6 text-center sm:px-8 sm:pt-8">
-        <CapsuleOrb />
-        <h2 className="mt-2 text-3xl font-bold tracking-[-0.035em] text-slate-900 sm:text-4xl">Welcome to <span className="bg-gradient-to-r from-teal-700 to-cyan-600 bg-clip-text text-transparent">MediFind PH</span></h2>
-        <p className="mt-2 text-sm font-medium tracking-wide text-slate-600 sm:text-base">Your OTC Medicine Information Assistant</p>
-        <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-500 sm:text-sm">Search verified medicine details from the MediFind PH leaflet collection, with source citations you can inspect.</p>
+          <h2 className="mt-6 max-w-xl font-serif text-[34px] font-medium leading-[1.04] tracking-[-0.02em] text-ink sm:text-[42px]">
+            What would you like to know about OTC medicines?
+          </h2>
+          <p className="mt-3.5 max-w-xl text-[13px] leading-7 text-muted">
+            Ask about medicine ingredients, formulations, documented uses, warnings, and precautions available in the MediFind PH knowledge base.
+          </p>
 
-        <div className="mt-6 grid w-full grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
-          {SHORTCUTS.map(({ label, icon: Icon, color, question }) => (
-            <button key={label} type="button" onClick={() => onExample(question)} className="shortcut-card group flex min-h-[82px] items-center gap-3 rounded-2xl px-3 py-3 text-left sm:px-4">
-              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${color} shadow-sm transition-transform group-hover:scale-105`}><Icon className="h-[18px] w-[18px]" aria-hidden="true" /></span>
-              <span className="text-xs font-semibold text-slate-700 sm:text-sm">{label}</span>
+          <section className="mt-8" aria-labelledby="suggested-questions-title">
+            <div className="flex items-center justify-between gap-3 border-b border-line pb-2.5">
+              <h3 id="suggested-questions-title" className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted">
+                <MessageSquareText className="h-3.5 w-3.5 text-brand-700" aria-hidden="true" />
+                Suggested questions
+              </h3>
+              <span className="font-mono text-[9px] text-muted">04</span>
+            </div>
+
+            <ul>
+              {SUGGESTED_QUESTIONS.map((question) => (
+                <li key={question}>
+                  <button
+                    type="button"
+                    onClick={() => onSelectSuggestion(question)}
+                    className="group flex w-full items-center gap-3 border-b border-line border-l-2 border-l-transparent py-3 pl-2 pr-1 text-left transition-colors hover:border-l-brass-400 hover:bg-paper-2/80"
+                  >
+                    <span className="min-w-0 flex-1 text-[13px] leading-6 text-ink">{question}</span>
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted/60 transition-all group-hover:translate-x-0.5 group-hover:text-brand-700" aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <div className="mt-6 border-l-2 border-line-strong pl-3.5">
+            <p className="max-w-xl text-[11.5px] leading-6 text-muted">
+              You can ask about documented OTC medicine information. MediFind PH does not provide diagnoses, prescriptions, personalized dosing, real-time prices, or pharmacy stock.
+            </p>
+            <button
+              type="button"
+              onClick={onViewScope}
+              className="mt-2 inline-flex items-center gap-1.5 font-mono text-[8.5px] uppercase tracking-[0.1em] text-brand-700 underline decoration-line-strong decoration-dotted underline-offset-4 transition-colors hover:text-brand-900"
+            >
+              View Full Scope and Limitations
+              <ArrowRight className="h-3 w-3" aria-hidden="true" />
             </button>
-          ))}
+          </div>
         </div>
       </div>
     </div>

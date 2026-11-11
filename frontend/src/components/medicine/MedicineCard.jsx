@@ -1,14 +1,12 @@
-import { Pill } from 'lucide-react'
-
 function Field({ label, value, className = '' }) {
   return (
     <div className={className}>
-      <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+      <dt className="font-mono text-[8.5px] font-medium uppercase tracking-[0.13em] text-muted">
         {label}
       </dt>
-      <dd className="mt-0.5 text-sm leading-snug text-slate-800">
+      <dd className="mt-1 text-[12.5px] leading-6 text-ink">
         {value ?? (
-          <span className="italic text-slate-400">
+          <span className="italic text-muted/70">
             Not recorded in the structured record
           </span>
         )}
@@ -29,18 +27,23 @@ export default function MedicineCard({ medicine, demo = false }) {
   if (!medicine) return null
 
   return (
-    <article className="mt-3 overflow-hidden rounded-xl border border-white/70 bg-white/65 shadow-sm backdrop-blur-md">
-      <header className="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-emerald-600 px-4 py-2.5 text-white">
-        <Pill className="h-4 w-4 shrink-0" aria-hidden="true" />
-        <h4 className="min-w-0 flex-1 truncate text-sm font-semibold">
-          {medicine.brand}
-        </h4>
-        <span className="shrink-0 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+    <article className="mt-4 border border-l-2 border-line border-l-brass-400 bg-paper-2">
+      <header className="flex items-start justify-between gap-3 border-b border-line px-4 py-3">
+        <div className="min-w-0">
+          <h4 className="truncate font-serif text-[16px] font-medium text-ink">
+            {medicine.brand}
+          </h4>
+          <p className="mt-0.5 truncate font-mono text-[8.5px] uppercase tracking-[0.1em] text-muted">
+            {medicine.registrationNumber || 'No registration recorded'}
+          </p>
+        </div>
+        <span className="flex shrink-0 items-center gap-1.5 pt-0.5 font-mono text-[8.5px] font-medium uppercase tracking-[0.12em] text-brand-700">
+          <span className="h-1 w-1 bg-brass-500" aria-hidden="true" />
           {demo ? 'Demo record' : 'Verified record'}
         </span>
       </header>
 
-      <dl className="grid grid-cols-1 gap-x-5 gap-y-3 px-4 py-3.5 sm:grid-cols-2">
+      <dl className="grid grid-cols-1 gap-x-6 gap-y-3.5 px-4 py-4 sm:grid-cols-2">
         <Field label="Brand" value={medicine.brand} />
         <Field label="Generic name" value={medicine.genericName} />
         <Field

@@ -1,0 +1,118 @@
+{
+    "deliverable":  "Experiment Logs and Checkpoints",
+    "generated_at":  "2026-11-11T00:00:00+08:00",
+    "timezone":  "Asia/Manila",
+    "provenance":  {
+                       "executed_notebook":  {
+                                                 "path":  "experiments/GroupApex_RAG_Experiment_Notebook.ipynb",
+                                                 "bytes":  416592,
+                                                 "sha256":  "8B0F026A620470A024FD253751BF76E55EF12F7D045006BF267F06CB49A875D1"
+                                             },
+                       "saved_results":  {
+                                             "path":  "experiments/GroupApex_RAG_Experiment_Results.xlsx",
+                                             "bytes":  10739,
+                                             "sha256":  "DA0C82F6A05F443FBDFBA20A8DC2E4CCDE8E3E4CE388DDC9978302C763A8DB19"
+                                         },
+                       "production_manifest":  {
+                                                   "path":  "data/chroma_db/manifest.json",
+                                                   "bytes":  759,
+                                                   "sha256":  "F47B13BFFAE01078B503E0BFB1608C398E9C963F13F9385F2570DE945807F13F"
+                                               }
+                   },
+    "checkpoints":  [
+                        {
+                            "id":  "CP-DOCS",
+                            "result":  "226 extracted pages from 3 PDFs",
+                            "evidence":  "Notebook cells 7 and 9"
+                        },
+                        {
+                            "id":  "CP-INITIAL-703",
+                            "result":  "800/120 split; 703 chunks; new vector DB created",
+                            "evidence":  "Notebook cells 4, 9, and 11"
+                        },
+                        {
+                            "id":  "CP-LLM",
+                            "result":  "flan-t5-base loaded; RAG function ready",
+                            "evidence":  "Notebook cells 13 and 15"
+                        },
+                        {
+                            "id":  "CP-RUN-D",
+                            "result":  "800/200/top-k 3; 762 chunks; 3/9 quality; MRR@3 0.5926",
+                            "evidence":  "Notebook cell 22"
+                        },
+                        {
+                            "id":  "CP-PROD-762",
+                            "result":  "Current Chroma checkpoint matches selected configuration; 762 chunks",
+                            "evidence":  "data/chroma_db/manifest.json"
+                        }
+                    ],
+    "source_documents":  [
+                             {
+                                 "path":  "data\\source_documents\\MediFind_OTC_Vol1_Pain-Fever-Muscle.pdf",
+                                 "bytes":  7504869,
+                                 "modified_at":  "2026-10-22T20:09:31+08:00",
+                                 "sha256":  "C1AF5D9C984CA62A7E79031333739B5B5BEC614739C704DED6538DD99313C95B"
+                             },
+                             {
+                                 "path":  "data\\source_documents\\MediFind_OTC_Vol2_Cold-Cough-Allergy-Throat.pdf",
+                                 "bytes":  6221162,
+                                 "modified_at":  "2026-10-22T20:09:31+08:00",
+                                 "sha256":  "76B2C984A75AB0EF3BF8632C5C27D4D0A97D4C3621C55B0B8F0D64AB06D98D5A"
+                             },
+                             {
+                                 "path":  "data\\source_documents\\MediFind_OTC_Vol3_Digestive-Antiseptic-Eye.pdf",
+                                 "bytes":  7816407,
+                                 "modified_at":  "2026-10-22T20:09:31+08:00",
+                                 "sha256":  "8C2CBCECA17CA1E39A0D6865BDFE239E9D905147738AB1866E7912D5F72543B1"
+                             }
+                         ],
+    "vector_checkpoint_files":  [
+                                    {
+                                        "path":  "data\\chroma_db\\13007580-777b-4c6e-87d5-947cbd2e5225\\data_level0.bin",
+                                        "bytes":  167600,
+                                        "modified_at":  "2026-11-10T20:55:10+08:00",
+                                        "sha256":  "EBE2EFF62BF36B75EAF3CAA4478311AAC3F3D913E542B4105269B5A2E6CFF6B7",
+                                        "role":  "Chroma HNSW vector index component"
+                                    },
+                                    {
+                                        "path":  "data\\chroma_db\\13007580-777b-4c6e-87d5-947cbd2e5225\\header.bin",
+                                        "bytes":  100,
+                                        "modified_at":  "2026-11-10T20:55:10+08:00",
+                                        "sha256":  "A0E81C3B22454233BC12D0762F06DCCA48261A75231CF87C79B75E69A6C00150",
+                                        "role":  "Chroma HNSW vector index component"
+                                    },
+                                    {
+                                        "path":  "data\\chroma_db\\13007580-777b-4c6e-87d5-947cbd2e5225\\length.bin",
+                                        "bytes":  400,
+                                        "modified_at":  "2026-11-10T20:55:10+08:00",
+                                        "sha256":  "845863285A3EB94BA93677EF11D7F2185524E5152AD7FFB51FF1417F6BC8F102",
+                                        "role":  "Chroma HNSW vector index component"
+                                    },
+                                    {
+                                        "path":  "data\\chroma_db\\13007580-777b-4c6e-87d5-947cbd2e5225\\link_lists.bin",
+                                        "bytes":  0,
+                                        "modified_at":  "2026-11-10T20:55:10+08:00",
+                                        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                        "role":  "Chroma HNSW vector index component"
+                                    },
+                                    {
+                                        "path":  "data\\chroma_db\\chroma.sqlite3",
+                                        "bytes":  7802880,
+                                        "modified_at":  "2026-11-10T20:55:10+08:00",
+                                        "sha256":  "AC8B03312B8E12873047F4DCE4608CB5174D04AAB1D0B24C5FA99D3D80316DF0",
+                                        "role":  "Chroma metadata/document store"
+                                    },
+                                    {
+                                        "path":  "data\\chroma_db\\manifest.json",
+                                        "bytes":  759,
+                                        "modified_at":  "2026-11-10T12:41:59+08:00",
+                                        "sha256":  "F47B13BFFAE01078B503E0BFB1608C398E9C963F13F9385F2570DE945807F13F",
+                                        "role":  "Configuration and source fingerprint"
+                                    }
+                                ],
+    "notes":  [
+                  "Notebook cell execution timestamps were not stored; cell numbers provide traceability.",
+                  "The initial 703-chunk checkpoint and selected 762-chunk production checkpoint are separate stages.",
+                  "Binary checkpoint files are inventoried and hashed but not duplicated in this deliverable folder."
+              ]
+}

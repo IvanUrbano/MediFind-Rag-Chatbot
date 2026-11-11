@@ -363,20 +363,32 @@ def _leaflet_blocks(records: list[dict], query: str) -> list[str]:
     return blocks
 
 
-def _assemble_sources(matches: list[dict], hits: list[dict]) -> list[dict]:
-    """Citation list: verified record pages, leaflet pages, retrieved chunks.
+def _assemble_sources(
+    matches: list[dict],
+    hits: list[dict],
+    *,
+    section_kind: str | None = None,
+    source_intent: bool = False,
+    include_record_support: bool = False,
+    include_hits: bool = True,
+) -> list[dict]:
+    """Citation list scoped to the statements made in the answer.
 
-    Every passage comes straight from Chroma; duplicates by (file, page)
-    keep their first (highest-priority) occurrence.
+    Record/field answers cite registration-record pages only.  Leaflet
+    questions cite only the pages for the requested section, while explicit
+    source questions list the complete mapped leaflet.  Retrieved top-k
+    chunks are appended only for model-generated answers.  Every passage
+    still comes straight from Chroma; duplicates by (file, page) keep their
+    first (highest-priority) occurrence.
     """
     sources: list[dict] = []
     seen: set[tuple] = set()
 
     for match in matches:
         record = match["record"]
-        citations = [record.get("citation")] + list(
-            record.get("extra_citations") or []
-        )
+        citations = [record.get("citation")]
+        if section_kind == "indications" or include_record_support:
+            citations += list(record.get("extra_citations") or [])
         query = f"{record['brand']} {record['genericName']}"
         registration = record.get("registrationNumber")
         for cite in citations:
@@ -401,7 +413,21 @@ def _assemble_sources(matches: list[dict], hits: list[dict]) -> list[dict]:
         if not registration:
             continue
         query = f"{record['brand']} {record['genericName']}"
-        for cite in leaflet_citations(registration):
+        if source_intent:
+            citations = leaflet_citations(registration)
+        elif section_kind:
+            section = leaflet_section(registration, section_kind)
+            citations = (
+                [
+                    {"source": section["source"], "page": page}
+                    for page in section["pages"]
+                ]
+                if section
+                else []
+            )
+        else:
+            citations = []
+        for cite in citations:
             key = (cite["source"], cite["page"])
             if key in seen:
                 continue
@@ -415,7 +441,7 @@ def _assemble_sources(matches: list[dict], hits: list[dict]) -> list[dict]:
                 {"source": cite["source"], "page": cite["page"], "passage": passage}
             )
 
-    for hit in hits:
+    for hit in (hits if include_hits else []):
         source = hit.get("source")
         page = hit.get("page")
         if not source or (source, page) in seen:
@@ -519,6 +545,28 @@ def _section_quality(text: str) -> bool:
     return True
 
 
+def _section_quote(kind: str, text: str) -> str:
+    """Return a reliable section excerpt, including OCR symptom lists.
+
+    Multi-column leaflets sometimes place a lowercase comma-separated
+    adverse-effect list immediately after its heading.  It is useful and
+    directly quoted evidence even though it fails the prose-oriented
+    uppercase check in ``_section_quality``.  For that one reusable shape,
+    keep only the first complete list sentence; all other low-quality OCR
+    still goes through the guarded generator/limitation path.
+    """
+    if _section_quality(text):
+        return _clip(text, _SECTION_ANSWER_MAX_CHARS)
+    if kind != "side_effects":
+        return ""
+    first_sentence = re.split(r"(?<=[.!?])\s+", str(text or "").strip(), 1)[0]
+    candidate = _clip(first_sentence, _SECTION_ANSWER_MAX_CHARS)
+    items = [item.strip() for item in candidate.split(",") if item.strip()]
+    if len(items) >= 3 and len(candidate) >= 25:
+        return candidate
+    return ""
+
+
 def _section_answer(record: dict, kind: str, section: dict) -> str:
     """Deterministic answer quoting one extracted official-leaflet section."""
     registration = record.get("registrationNumber")
@@ -531,7 +579,7 @@ def _section_answer(record: dict, kind: str, section: dict) -> str:
     return (
         f"{record['brand']} — from its official leaflet, "
         f"{_SECTION_LABELS.get(kind, kind)}: "
-        f"{_clip(section['text'], _SECTION_ANSWER_MAX_CHARS)} "
+        f"{_section_quote(kind, section['text'])} "
         f"(FDA Reg. No. {registration}; {section['source']}, {page_text}). "
         "The verbatim passages are cited below."
     )
@@ -654,7 +702,9 @@ def _candidate_ok(
     )
 
 
-def _composed_answer(records: list[dict], usage: bool = False) -> str:
+def _composed_answer(
+    records: list[dict], usage: bool = False, query: str = ""
+) -> str:
     """Deterministic fallback built ONLY from verified record fields.
 
     Used for enumeration answers and when the generator is unavailable;
@@ -666,19 +716,50 @@ def _composed_answer(records: list[dict], usage: bool = False) -> str:
     if len(records) == 1:
         r = records[0]
         bits = []
-        if r.get("genericName"):
-            bits.append(f"{r['brand']} is recorded with generic name {r['genericName']}")
-        if r.get("strength") and r.get("dosageForm"):
-            bits.append(f"strength {r['strength']}, dosage form {r['dosageForm']}")
+        field_query = bool(query and _FIELD_QUESTION.search(query))
+        if not field_query or re.search(r"\bgeneric name\b", query, re.I):
+            if r.get("genericName"):
+                bits.append(
+                    f"{r['brand']} is recorded with generic name {r['genericName']}"
+                )
+        if field_query and re.search(
+            r"\bactive ingredients?\b|\bingredients?\b|\bcomposition\b",
+            query,
+            re.I,
+        ):
+            ingredients = " + ".join(r.get("activeIngredients") or [])
+            bits.append(
+                f"{r['brand']} has active ingredient(s) {ingredients or _MISSING}"
+            )
+        if (not field_query or re.search(r"\bstrengths?\b", query, re.I)) and r.get(
+            "strength"
+        ):
+            bits.append(f"strength {r['strength']}")
+        if (
+            not field_query
+            or re.search(r"\bdosage forms?\b|\bforms?\b", query, re.I)
+        ) and r.get("dosageForm"):
+            bits.append(f"dosage form {r['dosageForm']}")
+        if field_query and re.search(r"\bmanufacturers?\b|\bmade by\b", query, re.I):
+            bits.append(f"manufacturer {r.get('manufacturer') or _MISSING}")
+        if field_query and re.search(
+            r"\b(?:pharmacologic )?categor(?:y|ies)\b|\bclassification\b",
+            query,
+            re.I,
+        ):
+            bits.append(
+                "pharmacologic category "
+                f"{r.get('pharmacologicCategory') or _MISSING}"
+            )
+        if not field_query and r.get("manufacturer"):
+            bits.append(f"manufacturer {r['manufacturer']}")
+        if not field_query and r.get("pharmacologicCategory"):
+            bits.append(f"pharmacologic category {r['pharmacologicCategory']}")
+        if not field_query and _indications_text(r):
+            bits.append(f"documented indications: {_indications_text(r)}")
         if r.get("registrationNumber"):
             bits.append(f"FDA Reg. No. {r['registrationNumber']}")
-        if r.get("manufacturer"):
-            bits.append(f"manufacturer {r['manufacturer']}")
-        if r.get("pharmacologicCategory"):
-            bits.append(f"pharmacologic category {r['pharmacologicCategory']}")
-        if _indications_text(r):
-            bits.append(f"documented indications: {_indications_text(r)}")
-        missing = [
+        missing = [] if field_query else [
             label
             for label, value in (
                 ("dosage form", r.get("dosageForm")),
@@ -709,6 +790,13 @@ def _composed_answer(records: list[dict], usage: bool = False) -> str:
             f"{strength_form or _MISSING}, "
             f"FDA Reg. No. {r.get('registrationNumber') or _MISSING}"
         )
+        if re.search(r"\bmanufacturers?\b|\bmade by\b", query, re.I):
+            line += f", manufacturer {r.get('manufacturer') or _MISSING}"
+        if re.search(r"\b(?:pharmacologic )?categor(?:y|ies)\b", query, re.I):
+            line += (
+                f", pharmacologic category "
+                f"{r.get('pharmacologicCategory') or _MISSING}"
+            )
         if usage:
             line += f" — uses: {_indications_text(r) or _MISSING}"
         lines.append(line)
@@ -920,16 +1008,17 @@ def _source_answer(records: list[dict]) -> str:
     lines = ["Source evidence for the matched product records:"]
     for record in records:
         registration = record.get("registrationNumber")
-        own = [
-            cite
-            for cite in [record.get("citation")]
-            + list(record.get("extra_citations") or [])
-            if cite
-        ]
+        own = [cite for cite in [record.get("citation")] if cite]
+        supporting = list(record.get("extra_citations") or [])
         leaflet = leaflet_citations(registration) if registration else []
+        support_bit = (
+            f"; additional field evidence: {_cite_display(supporting)}"
+            if supporting
+            else ""
+        )
         lines.append(
             f"- {record.get('brand') or registration}: registration record "
-            f"{_cite_display(own) or _MISSING}; leaflet: "
+            f"{_cite_display(own) or _MISSING}{support_bit}; leaflet: "
             f"{_cite_display(leaflet) or 'no official leaflet is published in the volume'}."
         )
     lines.append("The verbatim passages are listed with the citations below.")
@@ -964,6 +1053,29 @@ def _mentions_only_own_regs(answer: str, record: dict) -> bool:
     """
     own = {str(record.get("registrationNumber") or "").upper()} - {""}
     return regs_in(answer) <= own
+
+
+def _select_comparison_matches(text: str, matches: list[dict]) -> list[dict]:
+    """Bind comparison details to the right product line.
+
+    First retain records carrying any explicitly named quantity (needed for
+    same-brand strength comparisons).  When multiple product lines remain,
+    apply dosage-form/variant narrowing independently inside each line so a
+    quantity belonging to product A cannot select a sibling of product B.
+    """
+    selected = select_mentioned_quantities(text, matches)
+    grouped: dict[str, list[dict]] = {}
+    for match in selected:
+        record = match["record"]
+        key = _brand_root(record) or normalize_text(record.get("brand") or "")
+        grouped.setdefault(key, []).append(match)
+    if len(grouped) <= 1:
+        return selected
+    scoped: list[dict] = []
+    for members in grouped.values():
+        narrowed, _signal = narrow_variants(text, members)
+        scoped.extend(narrowed)
+    return scoped or selected
 
 
 def _numbers_grounded(answer: str, evidence_text: str) -> bool:
@@ -1051,7 +1163,7 @@ def answer_question(message: str) -> dict:
     comparison_intent = bool(_COMPARISON_QUESTION.search(text))
     source_intent = bool(_SOURCE_QUESTION.search(text)) and not comparison_intent
     if comparison_intent and len(matches) > 1:
-        matches = select_mentioned_quantities(text, matches)
+        matches = _select_comparison_matches(text, matches)
     elif not is_enumeration_query(text) and len(matches) > 1:
         # Narrow to the variant the query describes; if the query carries
         # variant detail but still leaves several formulations, ask which
@@ -1068,6 +1180,7 @@ def answer_question(message: str) -> dict:
         hits = filter_conflicting_hits(hits, records)
 
     usage_intent = bool(_USAGE_QUESTION.search(text))
+    section_kind = _section_intent(text) if usage_intent else None
 
     # 5) Evidence = verified records first, then their leaflet passages,
     #    then the entity-filtered retrieved chunks.
@@ -1090,17 +1203,17 @@ def answer_question(message: str) -> dict:
     elif len(records) >= 2:
         # 6b) Multi-formulation matches: deterministic enumeration so two
         #     products are never blended ("usage" adds indications per line).
-        answer = _composed_answer(records, usage=usage_intent)
+        answer = _composed_answer(records, usage=usage_intent, query=text)
     elif len(records) == 1 and _FIELD_QUESTION.search(text):
         # 6c) Field questions: answer straight from the verified record.
-        answer = _composed_answer(records)
+        answer = _composed_answer(records, query=text)
     elif len(records) == 1 and usage_intent:
         # 6d) Use/indication/directions questions for one verified record.
         #     Structured fields and section-aware leaflet extraction answer
         #     first; the generator is only a fallback, and heading-like
         #     fragments ("Dosage") are rejected as non-answers.
         record = records[0]
-        kind = _section_intent(text)
+        kind = section_kind
         section = (
             leaflet_section(record.get("registrationNumber"), kind)
             if kind
@@ -1108,7 +1221,7 @@ def answer_question(message: str) -> dict:
         )
         if kind == "indications" and record.get("indications"):
             answer = _usage_answer(record)
-        elif section and _section_quality(section["text"]):
+        elif section and _section_quote(kind, section["text"]):
             answer = _section_answer(record, kind, section)
         else:
             candidate = _llm_candidate(text, evidence)
@@ -1206,7 +1319,21 @@ def answer_question(message: str) -> dict:
                 return _response(INSUFFICIENT_ANSWER, "insufficient_evidence")
 
     # 8) Assemble the response
-    sources = _assemble_sources(matches, hits)
+    deterministic = bool(
+        comparison_intent
+        or source_intent
+        or len(records) >= 2
+        or (len(records) == 1 and _FIELD_QUESTION.search(text))
+        or (len(records) == 1 and usage_intent)
+    )
+    sources = _assemble_sources(
+        matches,
+        hits,
+        section_kind=section_kind,
+        source_intent=source_intent,
+        include_record_support=comparison_intent,
+        include_hits=not deterministic,
+    )
     medicine = [card_view(r) for r in records] if records else None
     recognized = recognized_label(matches)
     return _response(answer, status, sources=sources, medicine=medicine,

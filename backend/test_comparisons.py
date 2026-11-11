@@ -188,6 +188,29 @@ def main() -> int:
         answer[:700],
     )
 
+    print("--- decimal strengths remain distinct ---")
+    response = answer_question(
+        "Compare Bonamine 12.5 mg and Bonamine 25 mg chewable tablets."
+    )
+    check(
+        "both Bonamine decimal/integer formulations compared",
+        set(card_regs(response)) == {"DR-XY19867", "DR-XY22028"}
+        and "12.5 mg" in response["answer"]
+        and "25 mg" in response["answer"],
+        (card_regs(response), response["answer"][:500]),
+    )
+
+    print("--- cross-product quantities do not select sibling forms ---")
+    response = answer_question(
+        "Compare Dolfenal 250 mg and Gaviscon Double Action 10 mL Suspension."
+    )
+    check(
+        "quantity from Dolfenal does not select Gaviscon chewable",
+        set(card_regs(response)) == {"DRP-8716", SUSPENSION_REG}
+        and CHEWABLE_REG not in response["answer"],
+        (card_regs(response), response["answer"][:700]),
+    )
+
     print("--- source evidence questions ---")
     response = answer_question("Where is the Dolfenal information documented?")
     answer = response["answer"]
@@ -221,6 +244,11 @@ def main() -> int:
         and card_regs(response) == ["DRP-8716"]
         and "Mefenamic Acid" in response["answer"],
         response["answer"][:300],
+    )
+    check(
+        "field lookup cites only its registration record page",
+        source_pages(response) == {(VOL1, 22)},
+        source_pages(response),
     )
 
     print()
